@@ -1,50 +1,71 @@
 import { ApiException, fromHono } from "chanfana";
 import { Hono } from "hono";
-import { tasksRouter } from "./endpoints/tasks/router";
 import { ContentfulStatusCode } from "hono/utils/http-status";
-import { DummyEndpoint } from "./endpoints/dummyEndpoint";
 
-// Start a Hono app
+import { authRouter } from "./endpoints/auth/router";
+import { profileRouter } from "./endpoints/profile/router";
+import { resumeRouter } from "./endpoints/resume/router";
+import { healthEndpoint } from "./endpoints/health";
+
+// Start Hono app
 const app = new Hono<{ Bindings: Env }>();
 
+/**
+ * Global Error Handler
+ */
 app.onError((err, c) => {
-	if (err instanceof ApiException) {
-		// If it's a Chanfana ApiException, let Chanfana handle the response
-		return c.json(
-			{ success: false, errors: err.buildResponse() },
-			err.status as ContentfulStatusCode,
-		);
-	}
+  if (err instanceof ApiException) {
+    return c.json(
+      { success: false, errors: err.buildResponse() },
+      err.status as ContentfulStatusCode,
+    );
+  }
 
-	console.error("Global error handler caught:", err); // Log the error if it's not known
+  console.error("Global error handler caught:", err);
 
-	// For other errors, return a generic 500 response
-	return c.json(
-		{
-			success: false,
-			errors: [{ code: 7000, message: "Internal Server Error" }],
-		},
-		500,
-	);
+  return c.json(
+    {
+      success: false,
+      errors: [{ code: 7000, message: "Internal Server Error" }],
+    },
+    500,
+  );
 });
 
-// Setup OpenAPI registry
+/**
+ * OpenAPI / Swagger setup
+ */
 const openapi = fromHono(app, {
-	docs_url: "/",
-	schema: {
-		info: {
-			title: "My Awesome API",
-			version: "2.0.0",
-			description: "This is the documentation for my awesome API.",
-		},
-	},
+  docs_url: "/", // Swagger UI at root
+  schema: {
+    info: {
+      title: "Resume4J API",
+      version: "1.0.0",
+      description:
+        "Backend API for Resume4J — Free lifetime resume builder with authentication, profiles, and resume management.",
+    },
+    servers: [
+      {
+        url: "https://resume4j-api.scriptimiz.com",
+        description: "Production",
+      },
+    ],
+  },
 });
 
-// Register Tasks Sub router
-openapi.route("/tasks", tasksRouter);
+/**
+ * Routes
+ */
+openapi.route("/auth", authRouter);       // login / register
+openapi.route("/profile", profileRouter); // user profile
+openapi.route("/resumes", resumeRouter);  // resume CRUD
 
-// Register other endpoints
-openapi.post("/dummy/:slug", DummyEndpoint);
+/**
+ * Health check / ping
+ */
+openapi.get("/health", healthEndpoint);
 
-// Export the Hono app
+/**
+ * Export app
+ */
 export default app;

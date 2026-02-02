@@ -1,10 +1,11 @@
 import { ApiException, fromHono } from "chanfana";
 import { Hono } from "hono";
 import { ContentfulStatusCode } from "hono/utils/http-status";
+import { logger } from "./middleware/logger";
+import authRoutes from "./routes/auth";
+import profileRoutes from "./routes/profile";
+import resumeRoutes from "./routes/resume";
 
-import { authRouter } from "./endpoints/auth/router";
-import { profileRouter } from "./endpoints/profile/router";
-import { resumeRouter } from "./endpoints/resume/router";
 import { healthEndpoint } from "./endpoints/health";
 
 // Start Hono app

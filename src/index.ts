@@ -2,9 +2,9 @@ import { ApiException, fromHono } from "chanfana";
 import { Hono } from "hono";
 import { ContentfulStatusCode } from "hono/utils/http-status";
 import { logger } from "./middleware/logger";
-import authRoutes from "./routes/auth";
-import profileRoutes from "./routes/profile";
-import resumeRoutes from "./routes/resume";
+import authRouter from "./routes/auth";
+import profileRouter from "./routes/profile";
+
 
 // Start Hono app
 const app = new Hono<{ Bindings: Env }>();
@@ -55,7 +55,7 @@ const openapi = fromHono(app, {
 /**
  * Routes
  */
-openapi.route("/auth", authRoutes);       // login / register
+openapi.route("/auth", authRouter);       // login / register
 openapi.route("/profile", profileRouter); // user profile
 
 

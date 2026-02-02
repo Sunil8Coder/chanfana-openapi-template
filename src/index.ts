@@ -56,8 +56,8 @@ const openapi = fromHono(app, {
  * Routes
  */
 openapi.route("/auth", authRoutes);       // login / register
-openapi.route("/profile", profileRoutes); // user profile
-openapi.route("/resumes", resumeRoutes);  // resume CRUD
+openapi.route("/profile", profileRouter); // user profile
+
 
 
 

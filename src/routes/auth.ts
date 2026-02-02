@@ -2,9 +2,9 @@
 import { Hono } from "hono";
 import { hashPassword, comparePassword } from "../utils/hash";
 
-const app = new Hono();
+const authRouter = new Hono();
 
-app.post("/register", async (c) => {
+authRouter.post("/register", async (c) => {
   const { email, password } = await c.req.json();
 
   const hash = await hashPassword(password);
@@ -18,7 +18,7 @@ app.post("/register", async (c) => {
   return c.json({ success: true });
 });
 
-app.post("/login", async (c) => {
+authRouter.post("/login", async (c) => {
   const { email, password } = await c.req.json();
 
   const user = await c.env.DB
@@ -34,4 +34,4 @@ app.post("/login", async (c) => {
   return c.json({ userId: user.id });
 });
 
-export default app;
+export default authRouter;

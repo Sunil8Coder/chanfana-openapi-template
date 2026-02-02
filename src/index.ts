@@ -6,8 +6,6 @@ import authRoutes from "./routes/auth";
 import profileRoutes from "./routes/profile";
 import resumeRoutes from "./routes/resume";
 
-import { healthEndpoint } from "./endpoints/health";
-
 // Start Hono app
 const app = new Hono<{ Bindings: Env }>();
 
@@ -61,10 +59,7 @@ openapi.route("/auth", authRouter);       // login / register
 openapi.route("/profile", profileRouter); // user profile
 openapi.route("/resumes", resumeRouter);  // resume CRUD
 
-/**
- * Health check / ping
- */
-openapi.get("/health", healthEndpoint);
+
 
 /**
  * Export app

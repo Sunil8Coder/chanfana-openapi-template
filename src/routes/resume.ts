@@ -1,9 +1,9 @@
 // routes/resume.ts
 import { Hono } from "hono";
 
-const app = new Hono();
+const resumeRouter = new Hono();
 
-app.post("/", async (c) => {
+resumeRouter.post("/", async (c) => {
   const { userId, title, template, resumeData } = await c.req.json();
 
   await c.env.DB.prepare(
@@ -16,7 +16,7 @@ app.post("/", async (c) => {
   return c.json({ success: true });
 });
 
-app.get("/:userId", async (c) => {
+resumeRouter.get("/:userId", async (c) => {
   const userId = c.req.param("userId");
 
   const resumes = await c.env.DB
@@ -27,4 +27,4 @@ app.get("/:userId", async (c) => {
   return c.json(resumes.results);
 });
 
-export default app;
+export default resumeRouter;

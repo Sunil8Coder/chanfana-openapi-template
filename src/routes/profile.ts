@@ -12,7 +12,7 @@ const ProfileSchema = z.object({
   summary: z.string().optional(),
 });
 
-export default const profileRouter =  new Hono();
+ const profileRouter =  new Hono();
 
 /**
  * Get user profile
@@ -82,3 +82,5 @@ profileRouter.post("/:userId", async (c) => {
 
   return c.json({ success: true });
 });
+
+export default profileRouter;

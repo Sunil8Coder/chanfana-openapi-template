@@ -4,7 +4,7 @@ import { ContentfulStatusCode } from "hono/utils/http-status";
 import { logger } from "./middleware/logger";
 import authRouter from "./routes/auth";
 import profileRouter from "./routes/profile";
-
+import resumeRouter from "./routes/resume";
 
 // Start Hono app
 const app = new Hono<{ Bindings: Env }>();
@@ -57,8 +57,7 @@ const openapi = fromHono(app, {
  */
 openapi.route("/auth", authRouter);       // login / register
 openapi.route("/profile", profileRouter); // user profile
-
-
+openapi.route("/resume",resumeRouter);
 
 
 /**

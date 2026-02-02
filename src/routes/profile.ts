@@ -12,7 +12,7 @@ const ProfileSchema = z.object({
   summary: z.string().optional(),
 });
 
-export const profileRouter =  new Hono();
+export default const profileRouter =  new Hono();
 
 /**
  * Get user profile
